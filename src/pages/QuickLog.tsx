@@ -33,7 +33,7 @@ export default function QuickLogPage() {
         <div className='space-y-4'>
           <TouchButton
             onClick={() => setSelectedCategory(null)}
-            className=" text-blue-500"
+            className=" text-blue-500 border border-blue-500 w-48"
           >
             ←
           </TouchButton>

@@ -7,7 +7,8 @@ import {
   getCurrentPurchaseId,
   startNewPurchase,
   clearLogEntries,
-  getInventoryItems
+  getInventoryItems,
+  resumePurchase as resumePurchaseStorage
 } from '../lib/storage';
 
 export interface EnrichedLogEntry extends LogEntry {
@@ -65,6 +66,7 @@ export function LogsProvider({ children }: { children: ReactNode }) {
   };
 
   const resumePurchase = (purchaseId: string) => {
+    resumePurchaseStorage(purchaseId);
     setCurrentPurchaseId(purchaseId);
   };
 

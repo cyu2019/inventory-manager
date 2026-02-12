@@ -1,15 +1,6 @@
-import clsx from "clsx";
 import { useLogs } from "../contexts/LogsContext";
 import { TouchButton } from "./TouchButton";
 
-interface EnrichedLogEntry {
-  id: string;
-  itemId: string;
-  timestamp: number;
-  purchaseId: string;
-  itemName: string;
-  category: string;
-}
 
 export function LogTable() {
   const { logs, currentPurchaseId, deleteLog, addLog, clearLogs, downloadCSV, resumePurchase } = useLogs();
@@ -34,7 +25,7 @@ export function LogTable() {
 
         </div>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto text-2xl">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -58,35 +49,36 @@ export function LogTable() {
                     key={log.id}
                     className={log.purchaseId === currentPurchaseId ? 'bg-yellow-50' : purchases % 2 == 0 ? "bg-neutral-100" : ""}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-lg">
                       {new Date(log.timestamp).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap w-full">
                       <div className="flex items-center space-x-3">
                         <span>{log.itemName}</span>
-                        <button
-                          onClick={() => addLog(log.itemId)}
-                          className="text-blue-500"
-                        >
-                          Copy
-                        </button>
+
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{log.category}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        <button
+                        <TouchButton
+                          onClick={() => addLog(log.itemId)}
+                          className="border border-blue-500 text-blue-500"
+                        >
+                          ⿻
+                        </TouchButton>
+                        <TouchButton
                           onClick={() => deleteLog(log.id)}
-                          className="text-red-600 "
+                          className="border border-red-500 text-red-500"
                         >
-                          Delete
-                        </button>
-                        <button
+                          🗑️
+                        </TouchButton>
+                        <TouchButton
                           onClick={() => resumePurchase(log.purchaseId)}
-                          className="text-blue-500"
+                          className="border border-blue-500 text-blue-500"
                         >
-                          Resume
-                        </button>
+                          ▶️
+                        </TouchButton>
                       </div>
                     </td>
                   </tr>

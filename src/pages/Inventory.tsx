@@ -113,8 +113,7 @@ export default function InventoryPage() {
   return (
     <div className="space-y-4 p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Inventory Management</h1>
-        <div className="space-x-2">
+        <div className="flex items-center space-x-2">
           <TouchButton
             onClick={downloadCSV}
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
@@ -145,7 +144,7 @@ export default function InventoryPage() {
             id="name"
             value={newItem.name}
             onChange={(e) => setNewItem(prev => ({ ...prev, name: e.target.value }))}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="text-3xl mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -156,25 +155,24 @@ export default function InventoryPage() {
             value={newItem.category}
             onChange={(e) => setNewItem(prev => ({ ...prev, category: e.target.value }))}
             placeholder={selectedCategory !== 'all' ? selectedCategory : 'Uncategorized'}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="text-3xl mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
-        <button
-          type="submit"
+        <TouchButton
           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >
           Add Item
-        </button>
+        </TouchButton>
       </form>
 
       <div className="flex justify-between items-center">
         <div>
-          <label htmlFor="categoryFilter" className="block text-sm font-medium text-gray-700">Filter by Category</label>
+          <label htmlFor="categoryFilter" className="block text-sm font-medium text-gray-700">Category</label>
           <select
             id="categoryFilter"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="text-3xl mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="all">All Categories</option>
             {categories.map((category) => (
@@ -185,7 +183,7 @@ export default function InventoryPage() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 text-3xl">
           <thead className="bg-gray-50">
             <tr>
               <th
@@ -206,7 +204,7 @@ export default function InventoryPage() {
           <tbody className="bg-white divide-y divide-gray-200">
             {getSortedItems().map((item) => (
               <tr key={item.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap w-full">
                   <EditableCell
                     value={item.name}
                     onSave={(value) => updateItem(item.id, 'name', value)}
@@ -230,18 +228,20 @@ export default function InventoryPage() {
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    onClick={() => duplicateItem(item)}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    Duplicate
-                  </button>
-                  <button
-                    onClick={() => deleteItem(item.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
+                  <div className='flex items-center space-x-2'>
+                    <TouchButton
+                      onClick={() => duplicateItem(item)}
+                      className="border-blue-600 border"
+                    >
+                      ⿻
+                    </TouchButton>
+                    <TouchButton
+                      onClick={() => deleteItem(item.id)}
+                      className="border-red-600 border"
+                    >
+                      🗑️
+                    </TouchButton>
+                  </div>
                 </td>
               </tr>
             ))}

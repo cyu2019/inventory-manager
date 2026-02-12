@@ -111,6 +111,11 @@ export const startNewPurchase = (): string => {
   return newPurchaseId;
 };
 
+// Resume a purchase
+export const resumePurchase = (id: string) => {
+  localStorage.setItem(CURRENT_PURCHASE_KEY, id);
+};
+
 // Clear all log entries
 export const clearLogEntries = () => {
   localStorage.removeItem(LOGS_KEY);

@@ -46,21 +46,27 @@ export function TouchButton({ onClick, className = "", children, size = "small" 
   >
     {children}
     <div
-      className={`w-full h-full absolute -z-10 ${bgClass} opacity-60 rounded-md`}
+      className={`w-full h-full absolute ${bgClass} opacity-60 rounded-md`}
       style={{
         transition: "all 0.4s cubic-bezier( 0.02, 0.75, 0.11, 1.00 )",
         ...(touched ? {
           transform: "scale(1.5, 1.5)",
-        } : {})
+          opacity: 60
+        } : {
+          opacity: 0
+        })
       }}
     />
     <div
-      className={`w-full h-full absolute -z-10 ${bgClass} opacity-50 rounded-md`}
+      className={`w-full h-full absolute -z-10 ${bgClass}rounded-md`}
       style={{
         transition: "all 0.5s cubic-bezier(0.16, 0.62, 0.17, 0.85)",
         ...(touched ? {
           transform: "scale(1.3, 1.3)",
-        } : {})
+          opacity: 50
+        } : {
+          opacity: 0
+        })
       }}
     />
 
