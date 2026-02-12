@@ -1,3 +1,7 @@
+import clsx from "clsx";
+import { useLogs } from "../contexts/LogsContext";
+import { TouchButton } from "./TouchButton";
+
 interface EnrichedLogEntry {
   id: string;
   itemId: string;
@@ -7,32 +11,27 @@ interface EnrichedLogEntry {
   category: string;
 }
 
-interface LogTableProps {
-  logs: EnrichedLogEntry[];
-  currentPurchaseId: string;
-  onDeleteLog: (id: string) => void;
-  onDownloadCSV: () => void;
-  onClearLogs: () => void;
-}
+export function LogTable() {
+  const { logs, currentPurchaseId, deleteLog, addLog, clearLogs, downloadCSV, resumePurchase } = useLogs();
 
-export function LogTable({ logs, currentPurchaseId, onDeleteLog, onDownloadCSV, onClearLogs }: LogTableProps) {
   return (
     <div className="mt-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Recent Logs</h2>
-        <div className="space-x-2">
-          <button
-            onClick={onDownloadCSV}
+        <div className="space-x-2 flex items-center">
+          <TouchButton
+            onClick={downloadCSV}
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
           >
             Export CSV
-          </button>
-          <button
-            onClick={onClearLogs}
+          </TouchButton>
+          <TouchButton
+            onClick={clearLogs}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
           >
             Clear Logs
-          </button>
+          </TouchButton>
+
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -46,26 +45,54 @@ export function LogTable({ logs, currentPurchaseId, onDeleteLog, onDownloadCSV, 
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {logs.map((log) => (
-              <tr
-                key={log.id}
-                className={log.purchaseId === currentPurchaseId ? 'bg-yellow-50' : ''}
-              >
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(log.timestamp).toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{log.itemName}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{log.category}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => onDeleteLog(log.id)}
-                    className="text-red-600 hover:text-red-900"
+            {(() => {
+              let purchases = 0;
+              let countingPurchase = "";
+              return logs.map((log) => {
+                if (countingPurchase !== log.purchaseId) {
+                  countingPurchase = log.purchaseId
+                  purchases++;
+                }
+                return (
+                  <tr
+                    key={log.id}
+                    className={log.purchaseId === currentPurchaseId ? 'bg-yellow-50' : purchases % 2 == 0 ? "bg-neutral-100" : ""}
                   >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-3">
+                        <span>{log.itemName}</span>
+                        <button
+                          onClick={() => addLog(log.itemId)}
+                          className="text-blue-500"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">{log.category}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => deleteLog(log.id)}
+                          className="text-red-600 "
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={() => resumePurchase(log.purchaseId)}
+                          className="text-blue-500"
+                        >
+                          Resume
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })
+            })()}
           </tbody>
         </table>
       </div>

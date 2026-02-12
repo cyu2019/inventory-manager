@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import type { InventoryItem } from '../lib/storage';
+import { useItems } from '../contexts/ItemsContext';
+import { useLogs } from '../contexts/LogsContext';
 
-interface ItemSearchProps {
-  items: InventoryItem[];
-  onItemSelect: (itemId: string) => void;
-}
-
-export function ItemSearch({ items, onItemSelect }: ItemSearchProps) {
+export function ItemSearch() {
+  const { items } = useItems();
+  const { addLog: onItemSelect } = useLogs();
   const [searchText, setSearchText] = useState('');
   const [suggestions, setSuggestions] = useState<InventoryItem[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);

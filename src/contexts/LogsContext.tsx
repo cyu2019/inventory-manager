@@ -38,6 +38,7 @@ interface LogsContextType {
   addLog: (itemId: string) => void;
   deleteLog: (id: string) => void;
   completePurchase: () => void;
+  resumePurchase: (id: string) => void;
   clearLogs: () => void;
   downloadCSV: () => void;
 }
@@ -61,6 +62,10 @@ export function LogsProvider({ children }: { children: ReactNode }) {
   const completePurchase = () => {
     setCurrentPurchaseId(startNewPurchase());
     setLogs(getEnrichedLogs());
+  };
+
+  const resumePurchase = (purchaseId: string) => {
+    setCurrentPurchaseId(purchaseId);
   };
 
   const clearLogs = () => {
@@ -98,7 +103,8 @@ export function LogsProvider({ children }: { children: ReactNode }) {
     deleteLog,
     completePurchase,
     clearLogs,
-    downloadCSV
+    downloadCSV,
+    resumePurchase
   };
 
   return <LogsContext.Provider value={value}>{children}</LogsContext.Provider>;

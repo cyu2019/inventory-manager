@@ -4,6 +4,7 @@ import {
   importInventoryFromCSV
 } from '../lib/storage';
 import { useItems } from '../contexts/ItemsContext';
+import { TouchButton } from '../components/TouchButton';
 
 type SortField = 'name' | 'category';
 type SortDirection = 'asc' | 'desc';
@@ -114,18 +115,18 @@ export default function InventoryPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Inventory Management</h1>
         <div className="space-x-2">
-          <button
+          <TouchButton
             onClick={downloadCSV}
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
           >
             Export CSV
-          </button>
-          <button
+          </TouchButton>
+          <TouchButton
             onClick={handleImportClick}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
           >
             Import CSV
-          </button>
+          </TouchButton>
           <input
             type="file"
             ref={fileInputRef}
