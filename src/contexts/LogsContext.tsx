@@ -71,7 +71,8 @@ export function LogsProvider({ children }: { children: ReactNode }) {
   };
 
   const clearLogs = () => {
-    if (confirm('Are you sure you want to clear all logs? This action cannot be undone.')) {
+    if (confirm('Are you sure you want to clear all logs? This action cannot be undone. This will also export a CSV.')) {
+      downloadCSV();
       clearLogEntries();
       setLogs([]);
     }
@@ -94,7 +95,7 @@ export function LogsProvider({ children }: { children: ReactNode }) {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `inventory_log_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `logs_${new Date().toLocaleString().split('T')[0]}.csv`;
     link.click();
   };
 

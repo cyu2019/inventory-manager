@@ -78,6 +78,9 @@ export function ItemSearch() {
   };
 
   const handleSuggestionClick = (item: InventoryItem) => {
+    // clear box but don't delete suggestions
+    setSearchText('');
+
     onItemSelect(item.id);
   };
 

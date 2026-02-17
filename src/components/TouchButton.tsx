@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode, type PointerEvent } from "react";
 
 export type TouchButtonProps = {
   onClick?: () => void;
@@ -9,35 +9,41 @@ export type TouchButtonProps = {
 }
 
 export function TouchButton({ onClick, className = "", children, size = "small" }: TouchButtonProps) {
-  const touchedRef = useRef(false);
   const [touched, setTouched] = useState(false);
+  const [mouseDown, setMouseDown] = useState(false);
   const bgClass = className.split(" ").find(e => e.startsWith("bg-")) ?? "bg-neutral-300";
-  const touch = () => {
-    touchedRef.current = true
-    setTouched(true);
-  }
-  const untouch = () => {
-    if (touchedRef.current) onClick?.();
-    setTouched(false);
-    touchedRef.current = false
-  }
-  const untouchSafe = () => {
-    console.log("Hi");
-    setTouched(false);
-    touchedRef.current = false
-  }
-
   const buttonRef = useRef<HTMLButtonElement>(null)
 
+  const touch = () => {
+    setTouched(true);
+    setMouseDown(true);
+  }
+  const untouch = () => {
+    if (touched) onClick?.()
+    setTouched(false);
+    setMouseDown(false);
+  }
+  const checkMove = (e: PointerEvent<HTMLButtonElement>) => {
+    const b = buttonRef.current;
+    if (!b) return;
+    if (!mouseDown) return;
+    const inBounds =
+      e.clientX >= b.offsetLeft &&
+      e.clientX <= (b.offsetLeft + b.offsetWidth) &&
+      e.clientY >= b.offsetTop &&
+      e.clientY <= (b.offsetTop + b.offsetHeight)
 
+    if (touched && !inBounds)
+      setTouched(false);
+    if (!touched && inBounds)
+      setTouched(true);
+  }
 
   return <button
     ref={buttonRef}
-    onTouchStart={touch}
-    onMouseDown={touch}
-    onMouseUp={untouch}
-    onMouseLeave={untouchSafe}
-    onTouchEnd={untouch}
+    onPointerDown={touch}
+    onPointerUp={untouch}
+    // onPointerMove={checkMove}
     className={clsx(
       `p-3 flex items-center relative justify-center overflow-visible rounded-md touch-none transition-all`,
       size === "large" ? "text-8xl" : "text-3xl",
